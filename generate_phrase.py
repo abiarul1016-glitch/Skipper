@@ -29,7 +29,7 @@ def file_format_date(iso_date):
 def generate_phrase(start_date, end_date, absent_list):
     today = dt.datetime.now().strftime('%A, %B %d')
 
-    with open('system_prompt_V2.txt', 'r') as file:
+    with open('system_prompts/system_prompt_V3.txt', 'r') as file:
         SYSTEM_PROMPT = file.read()
 
     print('Generating phrase...')

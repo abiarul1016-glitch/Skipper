@@ -209,6 +209,7 @@ __marimo__/
 # Sensitive files
 output_audios/
 reference_audios/
+system_prompts/
 
 *.wav
 *.json
