@@ -19,7 +19,7 @@ def generate_phrase(start_date, end_date, absent_list):
     today = dt.datetime.now()
     today_weekday = calendar.day_name[today.weekday()]
 
-    with open('system_prompt.txt', 'r') as file:
+    with open('system_prompt_V2.txt', 'r') as file:
         SYSTEM_PROMPT = file.read()
 
     print('Generating phrase...')
