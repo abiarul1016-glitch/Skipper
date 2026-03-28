@@ -22,7 +22,7 @@ def generate_audio(
     with open(reference_audio_transcript, 'r') as file:
         reference_text = file.read()
 
-    print('🔮 Generating audio...')
+    print('🔮 Generating audio...\n')
     # Using MLX Audio and Qwen Voice Cloning, clone a reference voice to any sentence you want
     model = load_model('mlx-community/Qwen3-TTS-12Hz-0.6B-Base-bf16')
     results = list(model.generate(
@@ -33,7 +33,7 @@ def generate_audio(
 
     audio = results[0].audio # This is a mx array which has be converted using SciPy
 
-    print('🚀 Done generating!')
+    print('\n🚀 Done generating!\n')
 
     print('Saving to file...')
 

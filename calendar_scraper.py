@@ -61,7 +61,7 @@ def get_upcoming_skips(skip_calendar: str=SKIP_CALENDAR_ID):
     time_min, time_max = get_target_work_week()
 
     # Call the Calendar API
-    print("🚀 Getting the upcoming SKIP events for upcoming school week...")
+    print("🚀 Getting the upcoming SKIP events for upcoming school week...\n")
 
     events_result = (
         service.events()

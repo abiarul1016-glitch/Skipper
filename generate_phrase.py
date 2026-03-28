@@ -1,11 +1,13 @@
-import calendar
 import datetime as dt
 from ollama import chat, ChatResponse
 from calendar_scraper import get_upcoming_skips, get_target_work_week
 
 
 def main():
-    start_date, end_date = get_target_work_week()
+    unformatted_start_date, unformatted_end_date = get_target_work_week()
+
+    start_date = human_format_date(unformatted_start_date)
+    end_date = human_format_date(unformatted_end_date)
 
     absent_list = generate_absent_list(get_upcoming_skips())
 
@@ -15,9 +17,17 @@ def main():
     print(absent_list)
     print(f'Call Script: {generate_phrase(start_date, end_date, absent_list)}')
 
+
+def human_format_date(iso_date):
+    return dt.datetime.fromisoformat(iso_date).strftime('%A, %B %d')
+
+
+def file_format_date(iso_date):
+    return dt.datetime.fromisoformat(iso_date).strftime('%m_%d')
+
+
 def generate_phrase(start_date, end_date, absent_list):
-    today = dt.datetime.now()
-    today_weekday = calendar.day_name[today.weekday()]
+    today = dt.datetime.now().strftime('%A, %B %d')
 
     with open('system_prompt_V2.txt', 'r') as file:
         SYSTEM_PROMPT = file.read()
@@ -32,9 +42,8 @@ def generate_phrase(start_date, end_date, absent_list):
              
             Skipper, here is the context for this week:
 
-                Current Week: {start_date} — {end_date}
                 Today's Date: {today}
-                Current Day: {today_weekday}
+                Upcoming School Week: {start_date} — {end_date}
 
                 Absence(s) to report:
                 {absent_list}
@@ -50,7 +59,15 @@ def generate_phrase(start_date, end_date, absent_list):
 
 
 def generate_absent_list(upcoming_skips):
-    absent_list_phrase = '\n'.join(f"• Weekday: {calendar.day_name[skip['weekday']]}, Date: {skip['date']}" for skip in upcoming_skips)
+
+    formatted_absences = []
+
+    # Clean the dictionary data in the list to a Human-Readable Format
+    for skip in upcoming_skips:
+        formatted_date = dt.datetime.fromisoformat(skip['date']).strftime('%A, %B %d')
+        formatted_absences.append({'name': skip['name'], 'date': formatted_date})
+
+    absent_list_phrase = '\n'.join(f"• Date: {absence['date']}" for absence in formatted_absences)
     return absent_list_phrase
 
 
