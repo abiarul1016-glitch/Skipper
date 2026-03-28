@@ -211,3 +211,4 @@ output_audios/
 reference_audios/
 
 *.wav
+*.json
