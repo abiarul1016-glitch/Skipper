@@ -13,7 +13,7 @@ auth_token = os.getenv("TWILIO_AUTH_TOKEN")
 client = Client(account_sid, auth_token)
 
 call = client.calls.create(
-    url='/Users/abishanarulselvan/CODING/Skipper/skipper.xml',
+    url='https://skipper-cv93.onrender.com/skipper.xml',
     to="+16475623968",
     from_="++12494212067",
 )
