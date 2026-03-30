@@ -24,7 +24,7 @@ def generate_audio(
 
     print('🔮 Generating audio...\n')
     # Using MLX Audio and Qwen Voice Cloning, clone a reference voice to any sentence you want
-    model = load_model('mlx-community/Qwen3-TTS-12Hz-0.6B-Base-bf16')
+    model = load_model('mlx-community/Qwen3-TTS-12Hz-1.7B-Base-bf16')
     results = list(model.generate(
         text=text_to_generate,
         ref_audio=reference_audio,
