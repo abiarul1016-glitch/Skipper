@@ -9,7 +9,6 @@
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 [![Ollama](https://img.shields.io/badge/Ollama-fff?style=for-the-badge&logo=ollama&logoColor=000)](#)
 [![Qwen](https://custom-icon-badges.demolab.com/badge/Qwen-605CEC?style=for-the-badge&logo=qwen&logoColor=fff)](#)
-![Twilio](https://img.shields.io/badge/Twilio-API-blue?style=for-the-badge)
 ![Static Badge](https://img.shields.io/badge/twilio-red?style=for-the-badge&logo=https%3A%2F%2Fwww.svgrepo.com%2Fshow%2F354472%2Ftwilio-icon.svg&label=voice%20api)
 ![Static Badge](https://img.shields.io/badge/mlx_audio-orange?style=for-the-badge&label=voice%20cloning)
 [![Flask](https://img.shields.io/badge/Flask-fff?style=for-the-badge&logo=flask)](#)
