@@ -13,7 +13,7 @@ from generate_phrase import (
 )
 
 # GLOBAL VARIABLES
-SECRETS_FILE_PATH = "/Users/abishanarulselvan/CODING/snyder_pranker/secrets.env"
+SECRETS_FILE_PATH = "/Users/abishanarulselvan/CODING/Skipper/secrets.env"
 load_dotenv(SECRETS_FILE_PATH)
 
 SKIP_CALENDAR_ID = "2cab442dcaa371859cc8c0137d96f06d48b4d2e85ee67d5ee8a505f18f74b357@group.calendar.google.com"
@@ -34,11 +34,15 @@ DAD_PHONE_NUMBER = os.getenv("DAD_PHONE_NUMBER")
 SCHOOL_PHONE_NUMBER = os.getenv("SCHOOL_PHONE_NUMBER")
 
 # SYSTEM PROMPT
-# SYSTEM_PROMPT_PATH = "/Users/abishanarulselvan/CODING/snyder_pranker/system_prompts/april_fools/april_fools_V2.txt"
+# SYSTEM_PROMPT_PATH = ".txt"
 
 # FILE VARIABLES
 NGROK_URL = "https://incubous-caitlyn-herby.ngrok-free.dev"
 OUTPUT_FILE_DIRECTORY = "/Users/abishanarulselvan/CODING/Skipper/output_audios"
+
+# NUMBER SELECTION
+FROM_NUMBER = DAD_PHONE_NUMBER
+TO_NUMBER = MY_PHONE_NUMBER
 
 
 def main():
@@ -50,7 +54,6 @@ def main():
 
     # 2. CALL LLM TO GENERATE PHRASE FOR CALL CONSIDERING ABSENT DAYS, WHILE FOLLOWING PARAMETERS
     unformatted_start_date, unformatted_end_date = get_target_work_week()
-
     start_date = human_format_date(unformatted_start_date)
     end_date = human_format_date(unformatted_end_date)
 
@@ -83,13 +86,17 @@ def main():
 
     # 4. USE TWILIO TO PLACE THE CALL, DIAL ONE, AND PLAY THE AUDIO, AND HANG UP
     client = Client(ACCOUNT_SID, AUTH_TOKEN)
-    client.calls.create(
-        url="https://incubous-caitlyn-herby.ngrok-free.dev/skipper.xml",
-        to=MY_PHONE_NUMBER,
-        # USE ONLY IN PRODUCTION
-        # to=SCHOOL_PHONE_NUMBER,
-        from_=DAD_PHONE_NUMBER,
+
+    # USE ONLY IN PRODUCTION
+    # to=SCHOOL_PHONE_NUMBER,
+    call = client.calls.create(
+        url="https://incubous-caitlyn-herby.ngrok-free.dev/skipper/xml",
+        to=TO_NUMBER,
+        from_=FROM_NUMBER,
     )
+
+    # 5. SIMPLE SUCCESS LOG
+    print(f"🎉 Call placed to: {TO_NUMBER}, from: {FROM_NUMBER}! Call SID: {call.sid}")
 
 
 if __name__ == "__main__":
