@@ -95,7 +95,10 @@ Before running, remember that this project requires several external services (O
    # ... other keys
    ```
 
-4. **Run the Automation:**
+4. **Update the GENERIC system prompt:**
+   Updat generic_system_prompt.txt with your information, so that the script is much more tailored and accurate.
+
+5. **Run the Automation:**
    Execute the main script to trigger the full cycle:
    ```bash
    python main.py

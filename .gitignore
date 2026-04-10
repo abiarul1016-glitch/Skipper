@@ -211,6 +211,8 @@ output_audios/
 reference_audios/
 system_prompts/
 
+draft_readme/
+
 *.wav
 *.json
 *.txt
