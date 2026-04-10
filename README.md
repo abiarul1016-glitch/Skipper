@@ -1,118 +1,123 @@
-<!-- # Skipper
-Automate the calling to the office to notify of absences, by reading my calendar for my schedule of absences.
-
-How it works?
-Connects to your Google Calendar via the calendar API, and scrapes the upcoming planned skips (absences) you have for the current week (or the following week if the current date is the weekend) from your SKIP calendar. Then it uses the relevant skip dates to dynamically generate a phrase, based off a set of safe constraints, using local AI enabled through AI. This script is then transcribed into your parent's voice through Blaizzy's MLX-Audio, specifically using Qwen's 1.7B TTS engine. Lastly, this file is saved to your computer, and then accessed by Twilio to play the audio, after a couple of delays and dials to your school's attendance system. Note: this project is currently designed to work by serving up a server for Twilio to access using Flask and ngrok. -->
-
 # 🚪🏃🏽 Skipper
-**for when you finally realize school teaches jack******
 
-[![Python Version](https://img.shields.io/badge/Python-3.x-blue.svg)](https://www.python.org/)
-[![Status](https://img.shields.io/badge/Status-In%20Development-orange.svg)](https://github.com/your-username)
+**for when you finally realize school teaches jack\*\*\*\*.**
 
----
-
-### What and why?
-
-The ultimate hack for life. Connecting to your calendar, using local AI and voice cloning to call as your parents, automatically handling all the tedious calls about absences.
-
-**The system's flawed, why not exploit it?**
-
-Some people try to manage their time, other protect their time.
+[![Prototype Demo](https://img.youtube.com/vi/Smu0lYzUtLI/maxresdefault.jpg)](https://www.youtube.com/watch?v=Smu0lYzUtLI)
 
 ---
 
-### Features
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+[![Ollama](https://img.shields.io/badge/Ollama-fff?style=for-the-badge&logo=ollama&logoColor=000)](#)
+[![Qwen](https://custom-icon-badges.demolab.com/badge/Qwen-605CEC?style=for-the-badge&logo=qwen&logoColor=fff)](#)
+![Twilio](https://img.shields.io/badge/Twilio-API-blue?style=for-the-badge)
+![Static Badge](https://img.shields.io/badge/twilio-red?style=for-the-badge&logo=https%3A%2F%2Fwww.svgrepo.com%2Fshow%2F354472%2Ftwilio-icon.svg&label=voice%20api)
+![Static Badge](https://img.shields.io/badge/mlx_audio-orange?style=for-the-badge&label=voice%20cloning)
+[![Flask](https://img.shields.io/badge/Flask-fff?style=for-the-badge&logo=flask)](#)
 
-*   **Calendar Integration:** Reads your Google Calendar to locate all planned skips for the upcoming school week.
-*   **AI Script Generation:** Qwen generates natural, context-aware calling scripts, ensuring the tone is perfect for the task, based on a strict system prompt, that allows for creativity to uniqueness.
-*   **Voice Cloning (TTS):** Uses Blaizzy's MLX Audio to clone a reference voice, allowing the system to deliver calls in a voice that sounds eerily real.
-*   **Twilio:** Twilio API executes professional, automated outbound calls.
-*   **Smart Scheduling:** Time logic calculates the most relevant school week to report absences for. This way, absences can be planned weeks or even months ahead.
-*   **Stealth & Security:** Everything runs locally, ensuring data is handled with maximum privacy and security.
+---
 
-### Getting Started:
+## What and why?
 
-Time to set up your command center. Follow these steps to activate Skipper.
+Skipping class too much, and constantly getting those calls home to your parents? Then having to manually call the school office—to confirm your absence? The endless loop of "Yes, my son was absent on Tuesday, and Wednesday, and Thursday..."? It's draining, repetitive, and utterly boring—school spoonfeeds, it's not our fault 🤷🏽‍♂️.
 
-#### Prerequisites
+**Skipper** is the ultimate exploit, completely automating the process of notifying the school office of planned student absences by generating perfectly crafted, natural-sounding audio calls that sound exactly like your parent.
 
-*   **Python 3.x:** Probably 3.10 or above.
-*   **Ollama:** Runs local LLM (like Qwen).
-*   **Twilio Account:** Your portal to make calls to the real world.
-*   **Google Calendar Access:** Credentials to view your schedule.
-*   **MLX Audio Environment:** Necessary for the voice cloning magic.
+Instead of draining your (and your parents') time on a series of boring, scripted calls, you simply point it at your calendar, and **Skipper handles the communication, the scripting, and the voice delivery.**
 
-#### Installation (The Setup)
+Some people try to manage their time, others protect theirs—that's who Skipper is for.
 
-1.  **Clone the Repository:**
-    ```bash
-    git clone https://github.com/your-username/skipper.git
-    cd skipper
-    ```
+---
 
-2.  **Install Dependencies:**
-    Install the necessary libraries to bring the system to life:
-    ```bash
-    pip install -r requirements.txt
-    ```
+## Features
 
-3.  **Configure Secrets (The `.env` File):**
-    Create a file named `.env` in the root directory. **This is where you hide the sensitive keys.**
+- **Seamless Calendar Integration:** Automatically parses all planned absences from your Google Calendar, ensuring nothing falls through the cracks.
+- **Context-Aware AI Scripting:** Uses local LLMs (Qwen via Ollama) to generate sophisticated, non-robotic scripts. The AI ensures the tone is perfect for the required administrative context.
+- **Professional Voice Cloning (TTS):** Implements advanced voice cloning using MLX-Audio, delivering the message in a voice that is unnervingly believable.
+- **Outbound Call Orchestration:** Integrates with the Twilio API to execute professional, timed, and scheduled outbound calls to the main office.
+- **Secure Local Processing:** Everything runs entirely on your machine, ensuring that sensitive schedules and AI logic never touch the public cloud.
+- **Smart Scheduling:** Time logic intelligently determines the optimal school week to call about, allowing you to plan weeks or months in advance.
 
-    **`.env` Example:**
-    ```env
-    # Twilio Credentials (Your Access Keys)
-    TWILIO_ACCOUNT_SID="ACxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-    TWILIO_AUTH_TOKEN="your_auth_token_here"
-    MY_PHONE_NUMBER="+1234567890"
-    SCHOOL_PHONE_NUMBER="+19876543210"
-    DAD_PHONE_NUMBER="+1122334455"
+---
 
-    # System Configuration
-    NGROK_URL="https://incubous-caitlyn-herby.ngrok-free.dev" # Keep your tunnel active!
-    OUTPUT_FILE_DIRECTORY="./output_audios"
-    ```
+## How it works
 
-4.  **Run the Command:**
-    Activate the system and launch the automation sequence:
-    ```bash
-    python main.py
-    ```
+Skipper operates as a robust, multi-stage pipeline, moving from data ingestion to physical voice delivery with zero human intervention.
 
-### Architecture
+1. **Data Acquisition (`calendar_scraper.py`):** The system first accesses your Google Calendar API credentials to pull all scheduled absences for the target week. This is the core input data.
+2. **Intelligent Script Generation (`generate_phrase.py`):** The raw absence data is then fed into the local LLM (Qwen). The LLM uses a highly constrained system prompt to transform simple dates into a natural, conversational script, guaranteeing context and tone.
+3. **Audio Synthesis (`generate_audio.py`):** The generated text is immediately passed to the MLX-Audio pipeline. This model takes a reference voice sample and generates a high-fidelity audio file of the parent reading the script.
+4. **Web Bridge (`app.py`):** A minimal Flask server runs behind `ngrok`. This server acts as a secure, accessible endpoint that Twilio can call, requesting the synthesized audio file based on a unique session ID.
+5. **Orchestration & Delivery (`main.py`):** The main script coordinates the final action: triggering the Twilio API to make the outbound call, which connects to the Flask server to retrieve and play the pre-generated audio file. Both tracks of the call can be recorded to ensure the system works properly as well.
 
-A pipeline designed for maximum efficiency and stealth.
+This multi-step process ensures that the call sounds authentic, the message is precise, and the technical workflow is robust.
 
-1.  **Calendar Scraping (`calendar_scraper.py`):** We use the Google Calendar API to pull the target absence data for the most relevant school week.
-2.  **AI Script (`generate_phrase.py`):** The absence data is fed to the LLM to generate a perfectly crafted, human-sounding script, obeying strict, rules defined in the System Prompt.
-3.  **Voice Cloning (`generate_audio.py`):** The generated text is fed into the Qwen TTS model, cloning a reference voice (most likely your parent's) to create the final, believable audio file.
-4.  **Web Portal (`app.py`):** This is the Flask server running behind ngrok, acting as the secure bridge that Twilio uses to request the synthesized audio.
-5.  **Orchestration (`main.py`):** The master controller. It ties all the steps together, managing the flow from calendar scrape to voice delivery, and executes the final Twilio call.
+---
 
-### Future Upgrades:
+## Tech stack
 
-The system is modular, and I'm constantly working on features that give you ultimate control over this automation:
+Skipper is a distributed, local-first system.
 
-*   **Precision Scheduling:** Automate the calling. But also at random times, to make it seem less robotic.
-*   **Voice Diversity:** Call using either of my parents voice randomly, so the office lady doesn't catch on.
-*   **Emergency Override:** Implement a dedicated, instant command to force an emergency call, bypassing the schedule for any last-minute skips.
-*   **Audio Streaming:** Probably will be achieved through Python's multiprocessing, to radically improve performance.
+| Layer               | Technology      | Purpose                                                                               |
+| :------------------ | :-------------- | :------------------------------------------------------------------------------------ |
+| **Core Language**   | Python 3.x      | Orchestration, API scripting, and data handling.                                      |
+| **Local AI/LLM**    | Ollama (Qwen)   | Runs the local Large Language Model for script generation.                            |
+| **Voice Synthesis** | MLX-Audio       | Handles state-of-the-art, high-fidelity voice cloning (TTS).                          |
+| **Communication**   | Twilio API      | The outbound call mechanism, connecting the system to the real world.                 |
+| **Web Server**      | Flask / `ngrok` | Provides the necessary public-facing endpoint for Twilio to access the audio payload. |
 
-### 🤝 Contributing
+---
 
-If you have a new exploit, a better idea, or want to help me level up the system, jump in!
+## Running locally.
 
-1.  Fork the repository.
-2.  Create your feature branch (`git checkout -b feature/AmazingFeature`).
-3.  Make your changes and commit them (`git commit -m 'Added some control'`).
-4.  Push and open a Pull Request!
+Before running, remember that this project requires several external services (Ollama, Twilio account, Google credentials) to be configured via the `.env` file.
 
-### 🔒 Security & Privacy: Keep the Secrets Hidden
+1. **Clone the Repository:**
 
-Because this system handles real communication and personal data, security is non-negotiable.
+   ```bash
+   git clone https://github.com/your-username/skipper.git
+   cd skipper
+   ```
 
-*   **Secrets are King:** All sensitive tokens and phone numbers are stored exclusively in the **`.env`** file and are **never** committed to the repository.
-*   **Local Processing:** All heavy AI and voice cloning operations happen locally, ensuring your data stays private and off the public internet.
-*   **Rule Breaker:** **Never** hardcode API keys. Always use environment variables to keep your operational secrets safe.
+2. **Install Dependencies:**
+   This command installs all necessary Python libraries.
 
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Configure Environment Variables:**
+   Create a file named `.env` and fill in all your credentials:
+
+   ```env
+   # Example .env structure
+   TWILIO_ACCOUNT_SID="..."
+   TWILIO_AUTH_TOKEN="..."
+   # ... other keys
+   ```
+
+4. **Run the Automation:**
+   Execute the main script to trigger the full cycle:
+   ```bash
+   python main.py
+   ```
+   _(Wait for the process to confirm the call was placed and the audio was delivered!)_
+
+---
+
+## What's next.
+
+The system is inherently modular, and while it's functional now, the true potential is vast. Here's the roadmap to ultimate freedom:
+
+- 📈 **Multi-Call Scheduling:** Implement advanced scheduling to call at random, non-robotic times to enhance realism.
+- 🎙️ **Voice Profile Manager:** Allow switching between multiple parent voices with simple configuration changes.
+- 🗓️ **Manual Override CLI:** Dedicated command-line tool to generate and play a single, emergency audio file without touching the calendar logic.
+- ✉️ **Email Integration:** Expand functionality to handle notifications via automated email, reporting absences as well as calling.
+- ⚙️ **Configurable Tone Profiles:** Allow defining different tones (e.g., "Very Concerned," "Mildly Casual," "Disappointed") for the AI script generator.
+
+---
+
+<div align="center">
+
+the system's flawed. • why not exploit it? 🤷🏽‍♂️
+
+</div>
