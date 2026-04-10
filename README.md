@@ -17,13 +17,15 @@
 
 ## What and why?
 
-Skipping class too much, and constantly getting those calls home to your parents? Then having to manually call the school office—to confirm your absence? The endless loop of "Yes, my son was absent on Tuesday, and Wednesday, and Thursday..."? It's draining, repetitive, and utterly boring—school spoonfeeds, it's not our fault 🤷🏽‍♂️.
+Skipping class too much, and constantly getting those calls home to your parents? Then having to manually call the school office—to confirm your absence? The endless loop of "Yes, my son was absent on Tuesday, and Wednesday, and Thursday..."? It's draining, repetitive, and utterly boring.
+
+_school spoonfeeds, it's not our fault 🤷🏽‍♂️._
 
 **Skipper** is the ultimate exploit, completely automating the process of notifying the school office of planned student absences by generating perfectly crafted, natural-sounding audio calls that sound exactly like your parent.
 
 Instead of draining your (and your parents') time on a series of boring, scripted calls, you simply point it at your calendar, and **Skipper handles the communication, the scripting, and the voice delivery.**
 
-Some people try to manage their time, others protect theirs—that's who Skipper is for.
+Some people try to manage their time, others protect theirs.
 
 ---
 
@@ -95,7 +97,7 @@ Before running, remember that this project requires several external services (O
    ```
 
 4. **Update the GENERIC system prompt:**
-   Updat generic_system_prompt.txt with your information, so that the script is much more tailored and accurate.
+   Update generic_system_prompt.txt with your information, so that the script is much more tailored and accurate.
 
 5. **Run the Automation:**
    Execute the main script to trigger the full cycle:
