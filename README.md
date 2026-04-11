@@ -2,7 +2,7 @@
 
 **for when you finally realize school teaches jack\*\*\*\*.**
 
-[![Prototype Demo](https://img.youtube.com/vi/Smu0lYzUtLI/maxresdefault.jpg)](https://www.youtube.com/watch?v=Smu0lYzUtLI)
+[![Prototype Demo](https://img.youtube.com/vi/tkVnkNykPUw/maxresdefault.jpg)](https://www.youtube.com/watch?v=tkVnkNykPUw)
 
 ---
 
