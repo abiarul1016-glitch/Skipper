@@ -2,7 +2,7 @@
 
 **for when you finally realize school teaches jack\*\*\*\*.**
 
-[![Prototype Demo](https://img.youtube.com/vi/tkVnkNykPUw/maxresdefault.jpg)](https://www.youtube.com/watch?v=tkVnkNykPUw)
+[![Prototype Demo](https://img.youtube.com/vi/gcgAY3TF3Jc/maxresdefault.jpg)](https://www.youtube.com/watch?v=gcgAY3TF3Jc)
 
 ---
 
@@ -25,20 +25,19 @@ What if we just called the attendance office ahead of time, notifying them of ou
 
 Damn, that’s a lot of elements. **Skipper takes care of all that.**
 
-
 > “we've been spoon-fed baby food at school when we hungered for steak... the bits of meat that you did let slip through were pre-chewed and tasteless.” - The Hacker Manifesto
-
 
 ---
 
 ## Features
 
-*   **Google Calendar API Integration:** Automatically parses all planned absences (SKIP events) from your Google Calendar, only for the most relevant school week, allowing you to plan absences months in advance.
-*   **Custom Date/Logic Engine:** Employs proprietary date logic to determine the optimal school-week target. This prevents calling in highly sporadic or months-in-advance absences.
-*   **Local LLM Reasoning & Scripting:** Runs on-device AI models (Qwen 3.5 via Ollama) to generate highly plausible and deliberately vague absence rationales. The system enforces strict guidelines to avoid medical, accident, or specific health implications.
-    *   **Plausibility Matrix:** Reasons are categorized into SAFE (e.g., Family Commitment, Personal Obligation) and strictly prohibit specific illness keywords.
-*   **Voice Cloning (TTS):** Utilizes Blaizzy's MLX-Audio library to synthesize the script in your parent's cloned voice signature.
-*   **Twilio & Caller ID Spoofing:** Handles the telephony aspect entirely through Twilio, allowing the use of your parent’s verified phone number as the outgoing Caller ID, maximizing perceived legitimacy.
+- **Google Calendar API Integration:** Automatically parses all planned absences (SKIP events) from your Google Calendar, only for the most relevant school week, allowing you to plan absences months in advance.
+- **Custom Date/Logic Engine:** Employs proprietary date logic to determine the optimal school-week target. This prevents calling in highly sporadic or months-in-advance absences.
+- **Local LLM Reasoning & Scripting:** Runs on-device AI models (Qwen 3.5 via Ollama) to generate highly plausible and deliberately vague absence rationales. The system enforces strict guidelines to avoid medical, accident, or specific health implications.
+  - **Plausibility Matrix:** Reasons are categorized into SAFE (e.g., Family Commitment, Personal Obligation) and strictly prohibit specific illness keywords.
+- **Voice Cloning (TTS):** Utilizes Blaizzy's MLX-Audio library to synthesize the script in your parent's cloned voice signature.
+- **Twilio & Caller ID Spoofing:** Handles the telephony aspect entirely through Twilio, allowing the use of your parent’s verified phone number as the outgoing Caller ID, maximizing perceived legitimacy.
+
 ---
 
 ## How it works
@@ -73,11 +72,11 @@ Skipper is a distributed, local-first system.
 
 While highly functional, the project relies on several external components and technical prerequisites. These points are noted to ensure users understand the setup requirements and potential limitations:
 
-*   **Local Dependencies:** Due to specialized libraries (e.g., MLX-Audio optimized for Apple Silicon), cross-platform compatibility for certain features (like voice cloning) may require manual library swapping or specific hardware environments.
-*   **AI Backend:** The local text generation engine requires the use of Ollama. This can be easily bypassed by integrating alternative cloud AI providers (e.g., OpenAI API) if a local server setup is undesirable.
-*   **Telephony Service:** Full functionality, particularly advanced features like Caller ID masking, requires a paid Twilio account subscription.
+- **Local Dependencies:** Due to specialized libraries (e.g., MLX-Audio optimized for Apple Silicon), cross-platform compatibility for certain features (like voice cloning) may require manual library swapping or specific hardware environments.
+- **AI Backend:** The local text generation engine requires the use of Ollama. This can be easily bypassed by integrating alternative cloud AI providers (e.g., OpenAI API) if a local server setup is undesirable.
+- **Telephony Service:** Full functionality, particularly advanced features like Caller ID masking, requires a paid Twilio account subscription.
 
-*I will likely have to contanerize the application in something like Docker, to make it easier to distribute, and use.*
+_I will likely have to contanerize the application in something like Docker, to make it easier to distribute, and use._
 
 ---
 
@@ -137,6 +136,6 @@ The system is inherently modular, and while it's functional now, the true potent
 
 For when you finally realize school teaches jack\*\*\*\* • 💩
 
-*Happy skipping.*
+_Happy skipping._
 
 </div>
