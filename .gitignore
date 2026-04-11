@@ -212,8 +212,11 @@ reference_audios/
 system_prompts/
 
 draft_readme/
-assets/
+assets/videos/
 
+# GITHUB STORAGE PURPOSES
+*.mp4
 *.wav
+
 *.json
 *.env
