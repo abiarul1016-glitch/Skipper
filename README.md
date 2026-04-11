@@ -2,7 +2,7 @@
 
 **for when you finally realize school teaches jack\*\*\*\*.**
 
-[![Prototype Demo](https://img.youtube.com/vi/gcgAY3TF3Jc/maxresdefault.jpg)](https://www.youtube.com/watch?v=gcgAY3TF3Jc)
+![Skipper Logo](/assets/logo/skipper_logo_V2_shorter.jpg)
 
 ---
 
@@ -12,6 +12,10 @@
 ![Static Badge](https://img.shields.io/badge/twilio-red?style=for-the-badge&logo=https%3A%2F%2Fwww.svgrepo.com%2Fshow%2F354472%2Ftwilio-icon.svg&label=voice%20api)
 ![Static Badge](https://img.shields.io/badge/mlx_audio-orange?style=for-the-badge&label=voice%20cloning)
 [![Flask](https://img.shields.io/badge/Flask-fff?style=for-the-badge&logo=flask)](#)
+
+---
+
+[![Prototype Demo](https://img.youtube.com/vi/gcgAY3TF3Jc/maxresdefault.jpg)](https://www.youtube.com/watch?v=gcgAY3TF3Jc)
 
 ---
 
