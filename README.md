@@ -1,6 +1,6 @@
 # 🚪🏃🏽 Skipper
 
-**for when you finally realize school teaches jack\*\*\*\*.**
+**for when you finally realize school doesn't teach jack\*\*\*\*.**
 
 ![Skipper Logo](/assets/logo/skipper_logo_V2_shorter.jpg)
 
@@ -138,7 +138,7 @@ The system is inherently modular, and while it's functional now, the true potent
 
 <div align="center">
 
-For when you finally realize school teaches jack\*\*\*\* • 💩
+bc school teaches jack\*\*\*\* • 💩
 
 _Happy skipping._
 
