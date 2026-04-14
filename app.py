@@ -1,5 +1,5 @@
-from flask import Flask, Response, send_from_directory
-from twilio.twiml.voice_response import VoiceResponse
+from flask import Flask, Response, request, send_from_directory
+from twilio.twiml.voice_response import Start, VoiceResponse
 
 from calendar_scraper import get_target_work_week
 from generate_phrase import file_format_date
@@ -25,17 +25,26 @@ def serve_twiML():
     # RETURNS DYNAMIC TWIML GENERATING BY CALCULATING THE UPCOMING SCHOOL WEEK
     response = VoiceResponse()
 
+    start = Start()
+
+    # 2. DECLARE RECORDING ROUTE - NOTE: HTTP AUTHENTICATION FOR MEDIA ACCESS HAS BEEN DISABLED
+    twilio_recording_route = f"{NGROK_URL}/skipper/twilio-recording"
+
+    start.recording(channels="dual", recording_status_callback=twilio_recording_route)
+
+    response.append(start)
+
     # 1. EMBED THE FILENAME AND NGROK URL INTO TWIML
     audio_filepath = f"{NGROK_URL}/skipper/{OUTPUT_FILE_DIRECTORY}{get_filename()}"
 
     # TODO: CREATE A RECORDING VERSION, TO TEST THAT THE PROGRAM OBEYS TIME CONSTRAINTS, BEFORE PRODUCTION
     # 2. TODO: WAITING LOGIC, TO LEAVE VOICEMAIL AFTER POUND TONE
     #   1. WAIT PAST INITAL INSTRUCTION MESSAGE
-    response.pause(length=7)
-    #   2. DIAL '1'
-    response.dial(number="1")
-    #   3. WAIT PAST SECOND RECORDING INSTRUCTION MESSAGE
-    response.pause(length=22)
+    # response.pause(length=7)
+    # #   2. DIAL '1'
+    # response.dial(number="1")
+    # #   3. WAIT PAST SECOND RECORDING INSTRUCTION MESSAGE
+    response.pause(length=20)
 
     # 3. USING ROUTE, LET TWILIO ACCESS THE SPECIFIC FILE
     response.play(url=audio_filepath)
@@ -48,6 +57,18 @@ def serve_twiML():
 def serve_audio(filename):
     # SAFELY RETURNS THE APPROPRIATE AUDIO FILE FOR THE WEEK
     return send_from_directory(OUTPUT_FILE_DIRECTORY, filename)
+
+
+@app.route("/skipper/twilio-recording", methods=["GET", "POST"])
+def get_twilio_recording():
+    recording_url = request.values.get("RecordingUrl")
+    recording_Sid = request.values.get("RecordingSid")
+
+    if recording_url:
+        print(f"New recording available!: {recording_url}")
+
+    # Have to return empty value to Twilio webhook, so it doesn't attempt to resend multiple times
+    return "", 204
 
 
 def get_filename():

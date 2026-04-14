@@ -42,7 +42,7 @@ OUTPUT_FILE_DIRECTORY = "/Users/abishanarulselvan/CODING/Skipper/output_audios"
 
 # NUMBER SELECTION
 FROM_NUMBER = DAD_PHONE_NUMBER
-TO_NUMBER = MY_PHONE_NUMBER
+TO_NUMBER = SCHOOL_PHONE_NUMBER
 
 
 def main():
@@ -90,9 +90,10 @@ def main():
     # USE ONLY IN PRODUCTION
     # to=SCHOOL_PHONE_NUMBER,
     call = client.calls.create(
-        url="https://incubous-caitlyn-herby.ngrok-free.dev/skipper/xml",
+        send_digits='WWWWWWW1',
         to=TO_NUMBER,
         from_=FROM_NUMBER,
+        url="https://incubous-caitlyn-herby.ngrok-free.dev/skipper/xml",
     )
 
     # 5. SIMPLE SUCCESS LOG
