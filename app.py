@@ -1,5 +1,5 @@
 from flask import Flask, Response, request, send_from_directory
-from twilio.twiml.voice_response import Start, VoiceResponse
+from twilio.twiml.voice_response import VoiceResponse
 
 from calendar_scraper import get_target_work_week
 from generate_phrase import file_format_date
@@ -25,22 +25,13 @@ def serve_twiML():
     # RETURNS DYNAMIC TWIML GENERATING BY CALCULATING THE UPCOMING SCHOOL WEEK
     response = VoiceResponse()
 
-    start = Start()
-
-    # 1. DECLARE RECORDING ROUTE - NOTE: HTTP AUTHENTICATION FOR MEDIA ACCESS HAS BEEN DISABLED
-    twilio_recording_route = f"{NGROK_URL}/skipper/twilio-recording"
-
-    start.recording(channels="dual", recording_status_callback=twilio_recording_route)
-
-    response.append(start)
-
-    # 2. EMBED THE FILENAME AND NGROK URL INTO TWIML
+    # 1. EMBED THE FILENAME AND NGROK URL INTO TWIML
     audio_filepath = f"{NGROK_URL}/skipper/{OUTPUT_FILE_DIRECTORY}{get_filename()}"
 
-    # 3. WAITING LOGIC - WAIT PAST SECOND RECORDING INSTRUCTION MESSAGE
+    # 2. WAITING LOGIC - WAIT PAST SECOND RECORDING INSTRUCTION MESSAGE
     response.pause(length=20)
 
-    # 4. USING ROUTE, LET TWILIO ACCESS THE SPECIFIC FILE
+    # 3. USING ROUTE, LET TWILIO ACCESS THE SPECIFIC FILE
     response.play(url=audio_filepath)
 
     return Response(str(response), mimetype="text/xml")
@@ -58,6 +49,7 @@ def get_twilio_recording():
     recording_url = request.values.get("RecordingUrl")
     recording_Sid = request.values.get("RecordingSid")
 
+    # TODO: ADD FUNCTIONALITY TO DIRECTLY RETURN LINK/PRINT LINK IN MAIN.PY
     if recording_url:
         print(f"New recording available!: {recording_url}")
 
@@ -78,4 +70,4 @@ def get_filename():
 
 
 if __name__ == "__main__":
-    app.run(port=8080)
+    app.run(port=8000)
