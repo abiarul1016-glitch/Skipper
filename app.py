@@ -27,26 +27,20 @@ def serve_twiML():
 
     start = Start()
 
-    # 2. DECLARE RECORDING ROUTE - NOTE: HTTP AUTHENTICATION FOR MEDIA ACCESS HAS BEEN DISABLED
+    # 1. DECLARE RECORDING ROUTE - NOTE: HTTP AUTHENTICATION FOR MEDIA ACCESS HAS BEEN DISABLED
     twilio_recording_route = f"{NGROK_URL}/skipper/twilio-recording"
 
     start.recording(channels="dual", recording_status_callback=twilio_recording_route)
 
     response.append(start)
 
-    # 1. EMBED THE FILENAME AND NGROK URL INTO TWIML
+    # 2. EMBED THE FILENAME AND NGROK URL INTO TWIML
     audio_filepath = f"{NGROK_URL}/skipper/{OUTPUT_FILE_DIRECTORY}{get_filename()}"
 
-    # TODO: CREATE A RECORDING VERSION, TO TEST THAT THE PROGRAM OBEYS TIME CONSTRAINTS, BEFORE PRODUCTION
-    # 2. TODO: WAITING LOGIC, TO LEAVE VOICEMAIL AFTER POUND TONE
-    #   1. WAIT PAST INITAL INSTRUCTION MESSAGE
-    # response.pause(length=7)
-    # #   2. DIAL '1'
-    # response.dial(number="1")
-    # #   3. WAIT PAST SECOND RECORDING INSTRUCTION MESSAGE
+    # 3. WAITING LOGIC - WAIT PAST SECOND RECORDING INSTRUCTION MESSAGE
     response.pause(length=20)
 
-    # 3. USING ROUTE, LET TWILIO ACCESS THE SPECIFIC FILE
+    # 4. USING ROUTE, LET TWILIO ACCESS THE SPECIFIC FILE
     response.play(url=audio_filepath)
 
     return Response(str(response), mimetype="text/xml")

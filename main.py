@@ -87,10 +87,9 @@ def main():
     # 4. USE TWILIO TO PLACE THE CALL, DIAL ONE, AND PLAY THE AUDIO, AND HANG UP
     client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
-    # USE ONLY IN PRODUCTION
-    # to=SCHOOL_PHONE_NUMBER,
+    # TODO: ADD AUTOMATED MACHINE DETECTION, SO WAITING VALUES IN XML NEED NOT BE HARDCODED
     call = client.calls.create(
-        send_digits='WWWWWWW1',
+        send_digits="WWWWWWW1",
         to=TO_NUMBER,
         from_=FROM_NUMBER,
         url="https://incubous-caitlyn-herby.ngrok-free.dev/skipper/xml",
