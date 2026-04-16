@@ -25,7 +25,7 @@ from generate_phrase import (
 SECRETS_FILE_PATH = "/Users/abishanarulselvan/CODING/Skipper/secrets.env"
 load_dotenv(SECRETS_FILE_PATH)
 
-SKIP_CALENDAR_ID = "2cab442dcaa371859cc8c0137d96f06d48b4d2e85ee67d5ee8a505f18f74b357@group.calendar.google.com"
+SKIP_CALENDAR_ID = os.getenv("SKIP_CALENDAR_ID")
 
 # REF AUDIO VARIABLES
 REF_AUDIO_PATH = "reference_audios/appa_reference.wav"
@@ -42,16 +42,23 @@ TWILIO_PHONE_NUMBER: str | None = os.getenv("TWILIO_PHONE_NUMBER")
 DAD_PHONE_NUMBER = os.getenv("DAD_PHONE_NUMBER")
 SCHOOL_PHONE_NUMBER = os.getenv("SCHOOL_PHONE_NUMBER")
 
-# SYSTEM PROMPT
-# SYSTEM_PROMPT_PATH = ".txt"
+# LLM VARIABLES
+# NOTE: ADD PATH - SYSTEM_PROMPT_PATH = ".txt", IMPROVE THE PROMPT AS WELL
+OLLAMA_MODEL = "qwen3.5"  # use 'gemma4' for the other installed model
+TTS_MODEL = "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-bf16"  # Replace 1.7, with 0.6 to use the smaller + faster model
 
 # FILE VARIABLES
 NGROK_URL = "https://incubous-caitlyn-herby.ngrok-free.dev"
 OUTPUT_FILE_DIRECTORY = "/Users/abishanarulselvan/CODING/Skipper/output_audios"
 
+# SELECTION VARIABLES
+
 # NUMBER SELECTION
 FROM_NUMBER = DAD_PHONE_NUMBER
 TO_NUMBER = SCHOOL_PHONE_NUMBER
+
+# RECORDING SELECTION - USE FOR TESTING PURPOSES
+RECORDING = os.getenv("RECORDING") == "True"
 
 
 def main():
@@ -76,7 +83,9 @@ def main():
     print(absent_list)
 
     print()
-    generated_phrase = generate_phrase(start_date, end_date, absent_list)
+    generated_phrase = generate_phrase(
+        start_date, end_date, absent_list, ollama_model=OLLAMA_MODEL
+    )
 
     print(f"\nCall Script: {generated_phrase}\n")
 
@@ -91,6 +100,7 @@ def main():
         reference_audio_transcript=REFERENCE_AUDIO_TRANSCRIPT,
         output_file=output_filename,
         text_to_generate=generated_phrase,
+        tts_model=TTS_MODEL,
     )
 
     # 4. USE TWILIO TO PLACE THE CALL, DIAL ONE, AND PLAY THE AUDIO, AND HANG UP
@@ -98,26 +108,27 @@ def main():
 
     # TODO: TRY TO IMPLEMENT AUTOMATED MACHINE DETECTION (IT IS OVERRIDDEN BY SENDDIGITS), SO WAITING VALUES IN XML NEED NOT BE HARDCODED
 
-    # TODO: FIX THE RECORDING VS NOT RECORDING COMMENTING JANKINESS
-    # NOTE: RECORDING VERSION ONLY FOR TEST PURPOSES (COMMENT OUT WHEN NOT IN USE)
-    # call = client.calls.create(
-    #     record=True,
-    #     recording_channels='dual',
-    #     recording_status_callback=f'{NGROK_URL}/skipper/twilio-recording',
-    #     recording_status_callback_event='completed',
-    #     send_digits="WWWWWWW1",
-    #     to=TO_NUMBER,
-    #     from_=FROM_NUMBER,
-    #     url=f"{NGROK_URL}/skipper/xml",
-    # )
+    # RECORDING VERSION ONLY FOR TEST PURPOSES
+    if RECORDING:
+        call = client.calls.create(
+            record=True,
+            recording_channels="dual",
+            recording_status_callback=f"{NGROK_URL}/skipper/twilio-recording",
+            recording_status_callback_event="completed",
+            send_digits="WWWWWWW1",
+            to=TO_NUMBER,
+            from_=FROM_NUMBER,
+            url=f"{NGROK_URL}/skipper/xml",
+        )
 
-    # NORMAL, AND COMMON USE CASE EDITION
-    call = client.calls.create(
-        send_digits="WWWWWWW1",
-        to=TO_NUMBER,
-        from_=FROM_NUMBER,
-        url=f"{NGROK_URL}/skipper/xml",
-    )
+    else:
+        # NORMAL, AND COMMON USE CASE EDITION
+        call = client.calls.create(
+            send_digits="WWWWWWW1",
+            to=TO_NUMBER,
+            from_=FROM_NUMBER,
+            url=f"{NGROK_URL}/skipper/xml",
+        )
 
     # 5. SIMPLE SUCCESS LOG
     print(f"🎉 Call placed to: {TO_NUMBER}, from: {FROM_NUMBER}! Call SID: {call.sid}")
