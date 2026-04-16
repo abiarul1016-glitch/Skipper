@@ -1,3 +1,4 @@
+# ACHIEVED, BUT CAN BE IMPROVED!
 # GREATEST IMPROVEMENT: TODO: AUTOMATICALLY LAUNCHING FLASKSERVER AND NGROK, WHEN MAIN.PY IS RAN, SO I DON'T MANUALLY NEED TO DO IT
 
 # 1. TODO: MAYBE CONVERT THE SERVER CODE TO FASTAPI
@@ -8,6 +9,8 @@
 # 4. TODO: IMPROVE SYSTEM PROMPT TO STOP ALWAYS CHOOSING FAMILY COMMITMENT TO STAY MORE DYNAMIC
 
 import os
+import subprocess
+import time
 
 from dotenv import load_dotenv
 from twilio.rest import Client
@@ -136,5 +139,31 @@ def main():
     # TODO: 6. USE REQUESTS (OR SOMETHING) TO EXTRACT THE RECORDING URL FROM THE FLASK APP, TO KEEP EVERYTHING CENTRALIZED WITHIN MAIN.PY FOR EASE OF USE
 
 
+def start_services() -> tuple:
+
+    # 1. SPIN UP FLASK SERVER
+    server: subprocess.Popen = subprocess.Popen(["uv", "run", "app.py"])
+
+    time.sleep(5)
+
+    # 2. SERVE VIA NGROK
+    tunnel: subprocess.Popen = subprocess.Popen(["ngrok", "http", "8000"])
+
+    # 3. ALLOW TIME TO SETUP
+    time.sleep(5)
+    return server, tunnel
+
+
 if __name__ == "__main__":
-    main()
+    # 1. SPIN UP FLASK SERVER AND TUNNEL VIA NGROK IN BACKGROUND
+    server, tunnel = start_services()
+
+    # CLEAR TERMINAL OUTPUT
+    print("\n" for _ in range(5))
+
+    try:
+        print("Services started, running main script...")
+        main()
+    finally:
+        server.terminate()
+        tunnel.terminate()
