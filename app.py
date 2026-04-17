@@ -1,73 +1,85 @@
+"""Flask API server for Skipper.
+
+Serves TwiML for Twilio calls and audio files for playback.
+Acts as an intermediary between Twilio and the audio generation system.
+"""
+
 from flask import Flask, Response, request, send_from_directory
 from twilio.twiml.voice_response import VoiceResponse
 
 from calendar_scraper import get_target_work_week
+from config import Config
 from generate_phrase import file_format_date
 
 app = Flask(__name__)
 
-# GLOBAL VARIABLES
-NGROK_URL = "https://incubous-caitlyn-herby.ngrok-free.dev"
 
-# REMINDER: ADD SLASHES AT THE END OF DIRECTORY, SO FLASK CAN ENTER THEM
-OUTPUT_FILE_DIRECTORY = "output_audios/"
-
-
-# HOMEPAGE FOR SKIPPER
 @app.route("/skipper/")
 def index():
+    """Health check endpoint."""
     return "This is the server hosting Skipper's required files."
 
 
-# SERVES TWIML FOR SPECIFIC SCHOOL WEEK
 @app.route("/skipper/xml", methods=["GET", "POST"])
 def serve_twiML():
-    # RETURNS DYNAMIC TWIML GENERATING BY CALCULATING THE UPCOMING SCHOOL WEEK
+    """Generate TwiML response with audio playback for Twilio call.
+
+    Pauses to skip past school's automated instructions, then plays
+    the pre-recorded absence notification message.
+    """
     response = VoiceResponse()
 
-    # 1. EMBED THE FILENAME AND NGROK URL INTO TWIML
-    audio_filepath = f"{NGROK_URL}/skipper/{OUTPUT_FILE_DIRECTORY}{get_filename()}"
+    # Get audio file for current week
+    audio_filepath = f"{Config.NGROK_URL}/skipper/output_audios/{get_filename()}"
 
-    # 2. WAITING LOGIC - WAIT PAST SECOND RECORDING INSTRUCTION MESSAGE
-    response.pause(length=20)
+    # Skip school's automated instructions (configurable pause)
+    response.pause(length=Config.PAUSE_SECONDS)
 
-    # 3. USING ROUTE, LET TWILIO ACCESS THE SPECIFIC FILE
+    # Play the absence notification audio
     response.play(url=audio_filepath)
 
     return Response(str(response), mimetype="text/xml")
 
 
-# SERVES THE CUSTOM AUDIO
 @app.route("/skipper/output_audios/<path:filename>")
 def serve_audio(filename):
-    # SAFELY RETURNS THE APPROPRIATE AUDIO FILE FOR THE WEEK
-    return send_from_directory(OUTPUT_FILE_DIRECTORY, filename)
+    """Serve audio file for playback.
+
+    Args:
+        filename: Audio file to stream
+    """
+    return send_from_directory(str(Config.OUTPUT_FILE_DIRECTORY), filename)
 
 
 @app.route("/skipper/twilio-recording", methods=["GET", "POST"])
 def get_twilio_recording():
+    """Handle Twilio recording status callback.
+
+    Called when a recorded call completes. Currently logs the recording URL;
+    TODO: implement retrieval in main.py for centralized handling.
+    """
     recording_url = request.values.get("RecordingUrl")
-    recording_Sid = request.values.get("RecordingSid")
+    recording_sid = request.values.get("RecordingSid")
 
-    # TODO: ADD FUNCTIONALITY TO DIRECTLY RETURN LINK/PRINT LINK IN MAIN.PY
     if recording_url:
-        print(f"New recording available!: {recording_url}")
+        print(f"📹 Call recorded: {recording_url}")
 
-    # Have to return empty value to Twilio webhook, so it doesn't attempt to resend multiple times
+    # Return 204 to prevent Twilio from retrying
     return "", 204
 
 
 def get_filename():
-    # 1. GET RELEVANT DATES FOR UPCOMING SCHOOL WEEK
-    unformatted_start_date, unformatted_end_date = get_target_work_week()
+    """Get audio filename for the current school week.
 
-    # 2. CALCULATE FILENAME
+    Returns:
+        str: Filename in format YYYY-MM-DD-YYYY-MM-DD.wav
+    """
+    unformatted_start_date, unformatted_end_date = get_target_work_week()
     file_start_date = file_format_date(unformatted_start_date)
     file_end_date = file_format_date(unformatted_end_date)
-
-    output_filename = f"{file_start_date}-{file_end_date}.wav"
-    return output_filename
+    return f"{file_start_date}-{file_end_date}.wav"
 
 
 if __name__ == "__main__":
-    app.run(port=8000)
+    """Start Flask server on configured port."""
+    app.run(port=Config.FLASK_PORT)

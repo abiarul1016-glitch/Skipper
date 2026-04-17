@@ -1,3 +1,9 @@
+"""Google Calendar integration for fetching absence events.
+
+Authenticates with Google Calendar API and retrieves absence events
+for the current school week from the configured SKIP calendar.
+"""
+
 import datetime as dt
 import os.path
 
@@ -7,63 +13,72 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-# If modifying these scopes, delete the file token.json.
-SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
+from config import Config
 
-SKIP_CALENDAR_ID = "2cab442dcaa371859cc8c0137d96f06d48b4d2e85ee67d5ee8a505f18f74b357@group.calendar.google.com"
+# Google Calendar API scopes - readonly for this application
+SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
 
 
 def main():
-    upcoming_skips = get_upcoming_skips()
-
-    # FOR TESTING REASONS
+    """Test calendar scraping by fetching and printing upcoming absences."""
+    upcoming_skips = get_upcoming_skips(Config.SKIP_CALENDAR_ID)
 
     if upcoming_skips:
         for skip in upcoming_skips:
             print(f"{skip['name']}: {skip['date']} - {skip['weekday']}")
-            # print(skip['name'], skip['date'], skip['weekday'])
 
 
 def get_skip_calendar_id():
-    # Checks environment if calendar id is given, and if not checks through calendar for relevant calendar ID
-    ...
+    """TODO: Implement automatic calendar ID discovery from calendar list."""
+    pass
 
 
-def get_upcoming_skips(skip_calendar: str = SKIP_CALENDAR_ID):
+def get_upcoming_skips(skip_calendar: str = None):
+    """Fetch all absence events for the current school week.
 
-    # Implement function to get SKIP Calendar ID based on Calendar name (SKIP) from Calendar list,
-    # if the id is not provided by user in environment—for now this is fine
-    skip_calendar = SKIP_CALENDAR_ID
+    Queries the configured SKIP calendar for events between the start and end
+    of the current work week.
 
+    Args:
+        skip_calendar: Calendar ID to query (uses Config default if None)
+
+    Returns:
+        list: List of dicts with keys: name, date, weekday
+
+    Raises:
+        HttpError: If Google Calendar API request fails
     """
-  Gets all upcoming skips for the upcoming school week
-  """
+    if skip_calendar is None:
+        skip_calendar = Config.SKIP_CALENDAR_ID
+
     creds = None
-    # The file token.json stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first
-    # time.
+
+    # Load cached credentials or authenticate user
     if os.path.exists("token.json"):
         creds = Credentials.from_authorized_user_file("token.json", SCOPES)
-    # If there are no (valid) credentials available, let the user log in.
+
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
+            # Refresh expired credentials
             creds.refresh(Request())
         else:
+            # Run OAuth flow for first-time authentication
             flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
             creds = flow.run_local_server(port=0)
-        # Save the credentials for the next run
+
+        # Cache credentials for future use
         with open("token.json", "w") as token:
             token.write(creds.to_json())
 
     try:
         service = build("calendar", "v3", credentials=creds)
 
-        # Filter out events for the relevant work week
+        # Get the target work week bounds
         time_min, time_max = get_target_work_week()
 
-        # Call the Calendar API
-        print("🚀 Getting the upcoming SKIP events for upcoming school week...\n")
+        print("📅 Fetching absence events from SKIP calendar...\n")
 
+        # Query calendar API for events in the work week
         events_result = (
             service.events()
             .list(
@@ -81,9 +96,8 @@ def get_upcoming_skips(skip_calendar: str = SKIP_CALENDAR_ID):
             print("No upcoming SKIP events found.")
             return
 
-        # Cleans the data to put in dictionary with only relevant information
+        # Parse event data into list of dicts
         upcoming_skips = []
-
         for event in events:
             start = event["start"].get("dateTime", event["start"].get("date"))
             weekday = dt.datetime.fromisoformat(start).weekday()
@@ -95,31 +109,28 @@ def get_upcoming_skips(skip_calendar: str = SKIP_CALENDAR_ID):
         return upcoming_skips
 
     except HttpError as error:
-        print(f"An error occurred: {error}")
+        print(f"❌ Calendar API error: {error}")
 
 
 def get_target_work_week() -> tuple:
-    """
-    Logic which finds the upcoming work week depending on whether today's date is part of
-    the upcoming work week
+    """Calculate the start and end dates of the current school work week.
 
-    NEED TO UPDATE THIS AS THE PROGRAM IS LIKELY TO BE RAN ON THE WEEKDAY OF THE RELEVANT SCHOOL WEEK
-    Just will have to reverse the logic
+    If today is a weekday (Mon-Fri): returns today through Friday.
+    If today is a weekend (Sat-Sun): returns the next Monday through Friday.
 
+    Returns:
+        tuple: (time_min, time_max) as ISO 8601 strings with UTC timezone
     """
     today = dt.datetime.now()
     weekday = today.weekday()
 
     if weekday == 5 or weekday == 6:
-        #   If today is the weekend apply the program on upcoming work week
+        # If today is weekend, schedule for next week's Monday-Friday
         days_until_monday = 7 - weekday
         start_date = today + dt.timedelta(days=days_until_monday)
-
-        # End date span is always the Friday of the same week
         end_date = start_date + dt.timedelta(days=4)
     else:
-        #   If it's any other day of the week, start_date is the same day, until the end of the week
-
+        # If weekday, schedule from today through Friday
         start_date = today
         days_until_friday = 4 - weekday
         end_date = today + dt.timedelta(days=days_until_friday)
