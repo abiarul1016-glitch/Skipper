@@ -31,7 +31,7 @@ def file_format_date(iso_date):
 def generate_phrase(start_date, end_date, absent_list, ollama_model="qwen3.5"):
     today = dt.datetime.now().strftime("%A, %B %d")
 
-    with open("system_prompts/system_prompt_V4.txt", "r") as file:
+    with open("system_prompts/system_prompt_V5.md", "r") as file:
         SYSTEM_PROMPT = file.read()
 
     print("Generating phrase...")

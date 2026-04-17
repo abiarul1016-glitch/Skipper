@@ -81,6 +81,7 @@ def main():
     print(f"\nCall Script: {generated_phrase}\n")
 
     # Synthesize audio using voice cloning
+    print("🔊 Synthesizing audio...")
     file_start_date = file_format_date(unformatted_start_date)
     file_end_date = file_format_date(unformatted_end_date)
 
@@ -97,6 +98,7 @@ def main():
     )
 
     # Place the call to school
+    print("📞 Placing call...")
     client = Client(Config.TWILIO_ACCOUNT_SID, Config.TWILIO_AUTH_TOKEN)
 
     if Config.RECORDING:
@@ -126,37 +128,31 @@ def main():
 
 
 def start_services() -> tuple:
-    """
-    Start Flask server and Ngrok tunnel in background processes.
-
-    Creates a logs directory and redirects subprocess output to files to keep
-    the main terminal clean.
-
-    Returns:
-        tuple: (server_process, tunnel_process, flask_log_file, ngrok_log_file)
-    """
-    # Create logs directory for service output
+    # Create logs directory if it doesn't exist
     logs_dir = Config.PROJECT_ROOT / "logs"
     logs_dir.mkdir(exist_ok=True)
 
-    # Prepare log files
+    # Open log files for subprocess output
     flask_log = open(logs_dir / "flask.log", "w")
     ngrok_log = open(logs_dir / "ngrok.log", "w")
 
-    # Start Flask server on configured port
+    # 1. SPIN UP FLASK SERVER
     server: subprocess.Popen = subprocess.Popen(
         ["uv", "run", "app.py"],
         stdout=flask_log,
         stderr=flask_log,
     )
+
     time.sleep(Config.SERVICE_START_TIMEOUT)
 
-    # Start Ngrok tunnel to expose server to internet
+    # 2. SERVE VIA NGROK
     tunnel: subprocess.Popen = subprocess.Popen(
         ["ngrok", "http", str(Config.FLASK_PORT)],
         stdout=ngrok_log,
         stderr=ngrok_log,
     )
+
+    # 3. ALLOW TIME TO SETUP
     time.sleep(Config.SERVICE_START_TIMEOUT)
 
     print("✅ Flask server started (logs: logs/flask.log)")
@@ -166,16 +162,16 @@ def start_services() -> tuple:
 
 
 if __name__ == "__main__":
-    """Entry point: Start services and run absence notification workflow."""
+    # 1. SPIN UP FLASK SERVER AND TUNNEL VIA NGROK IN BACKGROUND
     server, tunnel, flask_log, ngrok_log = start_services()
 
+    # Add extra spacing for readability in logs
     print()
 
     try:
         print("Services started, running main script...")
         main()
     finally:
-        # Clean shutdown: stop services and close log files
         server.terminate()
         tunnel.terminate()
         flask_log.close()

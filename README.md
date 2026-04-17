@@ -40,8 +40,9 @@ Damn, that’s a lot of elements. **Skipper takes care of all that.**
 - **Local LLM Reasoning & Scripting:** Runs on-device AI models (Qwen 3.5 via Ollama) to generate highly plausible and deliberately vague absence rationales. The system enforces strict guidelines to avoid medical, accident, or specific health implications.
   - **Plausibility Matrix:** Reasons are categorized into SAFE (e.g., Family Commitment, Personal Obligation) and strictly prohibit specific illness keywords.
 - **Voice Cloning (TTS):** Utilizes Blaizzy's MLX-Audio library to synthesize the script in your parent's cloned voice signature.
-- **Twilio & Caller ID Spoofing:** Handles the telephony aspect entirely through Twilio, allowing the use of your parent’s verified phone number as the outgoing Caller ID, maximizing perceived legitimacy.
-
+- **Twilio & Caller ID Spoofing:** Handles the telephony aspect entirely through Twilio, allowing the use of your parent’s verified phone number as the outgoing Caller ID, maximizing perceived legitimacy.- **Centralized Configuration:** Single `config.py` file manages all settings and environment variables with validation.
+- **Clean Logs:** Flask and Ngrok output goes to log files, keeping your terminal clean.
+<!-- - **CLI Options:** Command-line flags for testing modes (`--no-services`, `--test-script`). -->
 ---
 
 ## How it works
@@ -64,7 +65,8 @@ Skipper is a distributed, local-first system.
 
 | Layer               | Technology      | Purpose                                                                               |
 | :------------------ | :-------------- | :------------------------------------------------------------------------------------ |
-| **Core Language**   | Python 3.x      | Orchestration, API scripting, and data handling.                                      |
+| **Core Language**   | Python 3.11+    | Orchestration, API scripting, and data handling.                                      |
+| **Package Manager** | UV              | Fast Python package and dependency management.                                        |
 | **Local AI/LLM**    | Ollama (Qwen)   | Runs the local Large Language Model for script generation.                            |
 | **Voice Synthesis** | MLX-Audio       | Handles state-of-the-art, high-fidelity voice cloning (TTS).                          |
 | **Communication**   | Twilio API      | The outbound call mechanism, connecting the system to the real world.                 |
@@ -86,7 +88,7 @@ _I will likely have to contanerize the application in something like Docker, to 
 
 ## Running locally.
 
-Before running, remember that this project requires several external services (Ollama, Twilio account, Google credentials) to be configured via the `.env` file.
+Before running, remember that this project requires several external services (Ollama, Twilio account, Google credentials) to be configured via the `secrets.env` file.
 
 1. **Clone the Repository:**
 
@@ -99,11 +101,11 @@ Before running, remember that this project requires several external services (O
    This command installs all necessary Python libraries.
 
    ```bash
-   pip install -r requirements.txt
+   uv pip install -r requirements.txt
    ```
 
 3. **Configure Environment Variables:**
-   Create a file named `.env` and fill in all your credentials:
+   Create a file named `secrets.env` and fill in all your credentials:
 
    ```env
    # Example .env structure
@@ -112,15 +114,22 @@ Before running, remember that this project requires several external services (O
    # ... other keys
    ```
 
-4. **Update the GENERIC system prompt:**
-   Update generic_system_prompt.txt with your information, so that the script is much more tailored and accurate.
+4. **Update the system prompt:**
+   Update `system_prompts/system_prompt_V5.md` with your information, so that the script is much more tailored and accurate.
 
 5. **Run the Automation:**
    Execute the main script to trigger the full cycle:
    ```bash
-   python main.py
+   uv run main.py
    ```
    _(Wait for the process to confirm the call was placed and the audio was delivered!)_
+
+   <!-- **CLI Options:**
+   - `uv run main.py --no-services`: Skip starting Flask/Ngrok services (for offline testing)
+   - `uv run main.py --test-script`: Test script generation without audio synthesis or calls -->
+
+   **Log Files:**
+   Flask and Ngrok output is automatically logged to `logs/flask.log` and `logs/ngrok.log` to keep your terminal clean.
 
 ---
 
