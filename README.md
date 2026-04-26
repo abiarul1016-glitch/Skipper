@@ -17,8 +17,6 @@
 
 [![Prototype Demo](https://img.youtube.com/vi/gcgAY3TF3Jc/maxresdefault.jpg)](https://www.youtube.com/watch?v=gcgAY3TF3Jc)
 
----
-
 ## What and why?
 
 School spoonfeeds. It’s not our fault that it feels like it’s not worth it. So what do we do? Skip school, which no one minds. But when those dreaded absence calls come home…
@@ -31,8 +29,6 @@ Damn, that’s a lot of elements. **Skipper takes care of all that.**
 
 > “we've been spoon-fed baby food at school when we hungered for steak... the bits of meat that you did let slip through were pre-chewed and tasteless.” - The Hacker Manifesto
 
----
-
 ## Features
 
 - **Google Calendar API Integration:** Automatically parses all planned absences (SKIP events) from your Google Calendar, only for the most relevant school week, allowing you to plan absences months in advance.
@@ -42,8 +38,6 @@ Damn, that’s a lot of elements. **Skipper takes care of all that.**
 - **Voice Cloning (TTS):** Utilizes Blaizzy's MLX-Audio library to synthesize the script in your parent's cloned voice signature.
 - **Twilio & Caller ID Spoofing:** Handles the telephony aspect entirely through Twilio, allowing the use of your parent’s verified phone number as the outgoing Caller ID, maximizing perceived legitimacy.- **Centralized Configuration:** Single `config.py` file manages all settings and environment variables with validation.
 - **Clean Logs:** Flask and Ngrok output goes to log files, keeping your terminal clean.
-<!-- - **CLI Options:** Command-line flags for testing modes (`--no-services`, `--test-script`). -->
----
 
 ## How it works
 
@@ -56,8 +50,6 @@ Skipper operates as a robust, multi-stage pipeline, moving from data ingestion t
 5. **Orchestration & Delivery (`main.py`):** The main script coordinates the final action: triggering the Twilio API to make the outbound call, which connects to the Flask server to retrieve and play the pre-generated audio file. Both tracks of the call can be recorded to ensure the system works properly as well.
 
 This multi-step process ensures that the call sounds authentic, the message is precise, and the technical workflow is robust.
-
----
 
 ## Tech stack
 
@@ -72,8 +64,6 @@ Skipper is a distributed, local-first system.
 | **Communication**   | Twilio API      | The outbound call mechanism, connecting the system to the real world.                 |
 | **Web Server**      | Flask / `ngrok` | Provides the necessary public-facing endpoint for Twilio to access the audio payload. |
 
----
-
 ## Limitations & Prerequisites
 
 While highly functional, the project relies on several external components and technical prerequisites. These points are noted to ensure users understand the setup requirements and potential limitations:
@@ -83,8 +73,6 @@ While highly functional, the project relies on several external components and t
 - **Telephony Service:** Full functionality, particularly advanced features like Caller ID masking, requires a paid Twilio account subscription.
 
 _I will likely have to contanerize the application in something like Docker, to make it easier to distribute, and use._
-
----
 
 ## Running locally.
 
@@ -119,9 +107,11 @@ Before running, remember that this project requires several external services (O
 
 5. **Run the Automation:**
    Execute the main script to trigger the full cycle:
+
    ```bash
    uv run main.py
    ```
+
    _(Wait for the process to confirm the call was placed and the audio was delivered!)_
 
    <!-- **CLI Options:**
@@ -130,8 +120,6 @@ Before running, remember that this project requires several external services (O
 
    **Log Files:**
    Flask and Ngrok output is automatically logged to `logs/flask.log` and `logs/ngrok.log` to keep your terminal clean.
-
----
 
 ## What's next.
 
