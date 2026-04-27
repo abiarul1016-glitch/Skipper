@@ -2,7 +2,7 @@
 
 **for when you finally realize school doesn't teach jack\*\*\*\*.**
 
-![Skipper Logo](/assets/logo/skipper_logo_V2_shorter.jpg)
+![Skipper Logo](assets/logo/finals/skipper_full-logo_V2.jpg)
 
 ---
 
