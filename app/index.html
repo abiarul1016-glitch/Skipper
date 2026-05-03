@@ -73,10 +73,51 @@
         transform: translateY(-2px);
         box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
       }
+
+      #Skipper-logs {
+        /* structure */
+        margin-top: 30px;
+        padding: 20px;
+        width: 80%;
+        max-width: 600px;
+        min-height: 100px;
+        background-color: #f8f9fa;
+        border: 1px solid;
+        border-radius: 8px;
+
+        /* typography */
+        font-family: "Courier New", Courier, monospace;
+        color: #333;
+        text-align: left;
+
+        /* transitions */
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.6s ease;
+        pointer-events: none;
+      }
+
+      #Skipper-logs.show {
+        opacity: 1;
+        transform: translateY(0px);
+        pointer-events: auto;
+      }
     </style>
 
     <script>
-      document.addEventListener("DOMContentLoaded", () => {});
+      document.addEventListener("DOMContentLoaded", () => {
+        const call_btn = document.querySelector("#main-body button");
+        const log_output = document.getElementById("Skipper-logs");
+
+        call_btn.onclick = () => {
+          log_output.classList.add("show");
+          log_output.innerHTML = "Hello!";
+
+          console.log(
+            "Call Skipper button has been clicked, log outputs are now being displayed.",
+          );
+        };
+      });
     </script>
   </head>
   <body>
@@ -85,7 +126,7 @@
         <img
           id="skipper-small-logo"
           src="assets/logos/skipper_logo_V2.jpg"
-          alt="Skipper Small Logo"
+          alt="Skipper Small Logo. Goes to Skipper homepage when clicked."
         />
       </a>
     </div>
@@ -98,7 +139,7 @@
       />
       <button>Call Skipper!</button>
 
-      <div id="searchbar"></div>
+      <div id="Skipper-logs">Hello from Skipper!</div>
     </div>
   </body>
 </html>
