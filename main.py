@@ -81,7 +81,6 @@ def main():
     print(f"\nCall Script: {generated_phrase}\n")
 
     # Synthesize audio using voice cloning
-    print("🔊 Synthesizing audio...")
     file_start_date = file_format_date(unformatted_start_date)
     file_end_date = file_format_date(unformatted_end_date)
 
@@ -171,6 +170,7 @@ if __name__ == "__main__":
     try:
         print("Services started, running main script...")
         main()
+        time.sleep(500)
     finally:
         server.terminate()
         tunnel.terminate()

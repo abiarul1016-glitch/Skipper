@@ -28,7 +28,7 @@ def file_format_date(iso_date):
     return dt.datetime.fromisoformat(iso_date).strftime("%m_%d")
 
 
-def generate_phrase(start_date, end_date, absent_list, ollama_model="qwen3.5"):
+def generate_phrase(start_date, end_date, absent_list, ollama_model="qwen3.5:0.8b"):
     today = dt.datetime.now().strftime("%A, %B %d")
 
     with open("system_prompts/system_prompt_V5.md", "r") as file:

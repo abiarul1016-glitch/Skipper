@@ -37,7 +37,7 @@ class Config:
     SCHOOL_PHONE_NUMBER = os.getenv("SCHOOL_PHONE_NUMBER")
 
     # LLM Models
-    OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen3.5")
+    OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen3.5:0.8b")
     TTS_MODEL = os.getenv("TTS_MODEL", "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-bf16")
 
     # Calendar

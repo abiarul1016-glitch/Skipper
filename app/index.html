@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skipper</title>
+
+    <style>
+      /* for testing visual purposes */
+      body {
+        margin: 0;
+        padding: 0;
+        position: relative;
+        min-height: 100vh;
+      }
+
+      #sidebar {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+      }
+
+      #sidebar a {
+        transition: opacity 0.2s ease;
+      }
+
+      #sidebar a:hover {
+        opacity: 0.6;
+      }
+
+      #sidebar img {
+        width: 50px;
+        height: auto;
+        cursor: pointer;
+      }
+
+      #main-body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        min-height: 100vh;
+      }
+
+      #main-body img {
+        width: 75%;
+        max-width: 500px;
+      }
+
+      #main-body button {
+        /* structure */
+        background-color: black;
+        color: white;
+        padding: 10px 24px;
+        border: none;
+        border-radius: 50px;
+
+        /* typography */
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 14px;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+
+        /* transition and shadow */
+        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+        transition: all 0.3s ease;
+        outline: none;
+      }
+      /* animation */
+      button:hover {
+        background-color: #0056b3;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+      }
+    </style>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {});
+    </script>
+  </head>
+  <body>
+    <div id="sidebar">
+      <a href="index.html">
+        <img
+          id="skipper-small-logo"
+          src="assets/logos/skipper_logo_V2.jpg"
+          alt="Skipper Small Logo"
+        />
+      </a>
+    </div>
+
+    <div id="main-body">
+      <img
+        id="skipper-full-logo"
+        src="assets/logos/skipper_full-logo_V2.jpg"
+        alt="Skipper Logo"
+      />
+      <button>Call Skipper!</button>
+
+      <div id="searchbar"></div>
+    </div>
+  </body>
+</html>
