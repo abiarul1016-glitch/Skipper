@@ -1,0 +1,5 @@
+print('Hey there! How are you?')
+print()
+print('Can we do anything more complex with this?')
+print("Let's try printing a paragraph!")
+print('\nH\nE\nY\n\nH\nO\nW\n\nA\nR\nE\n\nH\nE\nY\n\nH\nO\nW\n\nA\nR\nE\n')

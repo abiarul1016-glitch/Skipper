@@ -110,8 +110,14 @@
         const log_output = document.getElementById("Skipper-logs");
 
         call_btn.onclick = () => {
-          log_output.classList.add("show");
-          log_output.innerText = "Hello!";
+          // Request python to start application
+          fetch("/run-skipper", { method: "POST" })
+            .then((response) => response.json())
+            .then((data) => {
+              log_output.classList.add("show");
+              log_output.innerText = data.output;
+            })
+            .catch((error) => console.error("Error", error));
 
           console.log(
             "Call Skipper button has been clicked, log outputs are now being displayed.",
@@ -125,7 +131,7 @@
       <a href="index.html">
         <img
           id="skipper-small-logo"
-          src="assets/logos/skipper_logo_V2.jpg"
+          src="/static/assets/logos/skipper_logo_V2.jpg"
           alt="Skipper Small Logo. Goes to Skipper homepage when clicked."
         />
       </a>
@@ -134,12 +140,18 @@
     <div id="main-body">
       <img
         id="skipper-full-logo"
-        src="assets/logos/skipper_full-logo_V2.jpg"
+        src="static/assets/logos/skipper_full-logo_V2.jpg"
         alt="Skipper Logo"
       />
       <button>Call Skipper!</button>
 
       <div id="Skipper-logs">Hello from Skipper!</div>
+
+      <!-- <div id="logs-container">
+        <div id="Skipper-logs">Hello from Skipper!</div>
+        <input type="text" placeholder="Input Field">
+        <input type="submit">
+      </div> -->
     </div>
   </body>
 </html>
